@@ -19,11 +19,11 @@ public class CoversController : ControllerBase
         _container = cosmosClient?.GetContainer("ClaimDb", "Cover")
                      ?? throw new ArgumentNullException(nameof(cosmosClient));
     }
-    
-    [HttpPost]
-    public async Task<ActionResult> ComputePremiumAsync(DateOnly startDate, DateOnly endDate, CoverType coverType)
+
+    [HttpGet("premium")] // change of the endpoint name and type breaks contract, but it fixes swagger and makes it compliant with REST
+    public ActionResult ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)
     {
-        return Ok(ComputePremium(startDate, endDate, coverType));
+        return Ok(ComputePremiumInternal(startDate, endDate, coverType));
     }
 
     [HttpGet]
@@ -46,7 +46,7 @@ public class CoversController : ControllerBase
     {
         try
         {
-            var response = await _container.ReadItemAsync<Cover>(id, new (id));
+            var response = await _container.ReadItemAsync<Cover>(id, new(id));
             return Ok(response.Resource);
         }
         catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
@@ -59,7 +59,7 @@ public class CoversController : ControllerBase
     public async Task<ActionResult> CreateAsync(Cover cover)
     {
         cover.Id = Guid.NewGuid().ToString();
-        cover.Premium = ComputePremium(cover.StartDate, cover.EndDate, cover.Type);
+        cover.Premium = ComputePremiumInternal(cover.StartDate, cover.EndDate, cover.Type);
         await _container.CreateItemAsync(cover, new PartitionKey(cover.Id));
         _auditer.AuditCover(cover.Id, "POST");
         return Ok(cover);
@@ -69,10 +69,10 @@ public class CoversController : ControllerBase
     public Task DeleteAsync(string id)
     {
         _auditer.AuditCover(id, "DELETE");
-        return _container.DeleteItemAsync<Cover>(id, new (id));
+        return _container.DeleteItemAsync<Cover>(id, new(id));
     }
 
-    private decimal ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)
+    private decimal ComputePremiumInternal(DateOnly startDate, DateOnly endDate, CoverType coverType)
     {
         var multiplier = 1.3m;
         if (coverType == CoverType.Yacht)
