@@ -6,12 +6,12 @@ namespace Claims.Application.Services
 {
     public class ClaimService : IClaimService
     {
-        private readonly IAuditRepository _auditRepository;
+        private readonly IAuditService _auditService;
         private readonly IClaimRepository _claimRepository;
 
-        public ClaimService(IAuditRepository auditRepository, IClaimRepository claimRepository)
+        public ClaimService(IAuditService auditService, IClaimRepository claimRepository)
         {
-            _auditRepository = auditRepository;
+            _auditService = auditService;
             _claimRepository = claimRepository;
         }
 
@@ -24,13 +24,13 @@ namespace Claims.Application.Services
         {
             claim.Id = Guid.NewGuid().ToString();
             await _claimRepository.AddItemAsync(claim);
-            _auditRepository.AuditClaim(claim.Id, "POST");
+            _auditService.AddClaimAudit(new ClaimAudit { ClaimId = claim.Id, HttpRequestType = "POST" });
             return claim;
         }
 
         public async Task DeleteAsync(string id)
         {
-            _auditRepository.AuditClaim(id, "DELETE");
+            _auditService.AddClaimAudit(new ClaimAudit { ClaimId = id, HttpRequestType = "DELETE" });
             await _claimRepository.DeleteItemAsync(id);
         }
 

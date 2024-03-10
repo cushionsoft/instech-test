@@ -6,12 +6,12 @@ namespace Claims.Application.Services
 {
     public class CoverService : ICoverService
     {
-        private readonly IAuditRepository _auditRepository;
+        private readonly IAuditService _auditService;
         private readonly ICoverRepository _coverRepository;
 
-        public CoverService(IAuditRepository auditRepository, ICoverRepository coverRepository)
+        public CoverService(IAuditService auditService, ICoverRepository coverRepository)
         {
-            _auditRepository = auditRepository;
+            _auditService = auditService;
             _coverRepository = coverRepository;
         }
 
@@ -30,13 +30,13 @@ namespace Claims.Application.Services
             cover.Id = Guid.NewGuid().ToString();
             cover.Premium = ComputePremium(cover.StartDate, cover.EndDate, cover.Type);
             await _coverRepository.AddItemAsync(cover);
-            _auditRepository.AuditCover(cover.Id, "POST");
+            _auditService.AddCoverAudit(new CoverAudit { CoverId = cover.Id, HttpRequestType = "POST" });
             return cover;
         }
 
         public async Task DeleteAsync(string id)
         {
-            _auditRepository.AuditCover(id, "DELETE");
+            _auditService.AddCoverAudit(new CoverAudit { CoverId = id, HttpRequestType = "DELETE" });
             await _coverRepository.DeleteItemAsync(id);
         }
 

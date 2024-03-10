@@ -47,6 +47,7 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddScoped<IAuditRepository, AuditRepository>();
 builder.Services.AddScoped<ICoverRepository, CoverRepository>();
 builder.Services.AddScoped<IClaimRepository, ClaimRepository>();
+builder.Services.AddSingleton<IAuditService, AuditService>();
 builder.Services.AddScoped<IClaimService, ClaimService>();
 builder.Services.AddScoped<ICoverService, CoverService>();
 builder.Services.AddScoped<IPremiumCalculatorService, PremiumCalculatorService>();

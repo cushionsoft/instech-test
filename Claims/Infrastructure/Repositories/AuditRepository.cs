@@ -12,7 +12,7 @@ namespace Claims.Infrastructure.Repositories
             _auditContext = auditContext;
         }
 
-        public void AuditClaim(string id, string httpRequestType)
+        public async Task AuditClaim(string id, string httpRequestType)
         {
             var claimAudit = new ClaimAudit()
             {
@@ -21,11 +21,11 @@ namespace Claims.Infrastructure.Repositories
                 ClaimId = id
             };
 
-            _auditContext.Add(claimAudit);
-            _auditContext.SaveChanges();
+            await _auditContext.AddAsync(claimAudit);
+            await _auditContext.SaveChangesAsync();
         }
 
-        public void AuditCover(string id, string httpRequestType)
+        public async Task AuditCover(string id, string httpRequestType)
         {
             var coverAudit = new CoverAudit()
             {
@@ -34,8 +34,8 @@ namespace Claims.Infrastructure.Repositories
                 CoverId = id
             };
 
-            _auditContext.Add(coverAudit);
-            _auditContext.SaveChanges();
+            await _auditContext.AddAsync(coverAudit);
+            await _auditContext.SaveChangesAsync();
         }
     }
 }
