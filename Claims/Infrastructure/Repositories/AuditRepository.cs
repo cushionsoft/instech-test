@@ -1,10 +1,13 @@
-﻿namespace Claims.Auditing
+﻿using Claims.Core.Repositories;
+using Claims.Infrastructure.Entities;
+
+namespace Claims.Infrastructure.Repositories
 {
-    public class Auditer
+    public class AuditRepository : IAuditRepository
     {
         private readonly AuditContext _auditContext;
 
-        public Auditer(AuditContext auditContext)
+        public AuditRepository(AuditContext auditContext)
         {
             _auditContext = auditContext;
         }
@@ -21,7 +24,7 @@
             _auditContext.Add(claimAudit);
             _auditContext.SaveChanges();
         }
-        
+
         public void AuditCover(string id, string httpRequestType)
         {
             var coverAudit = new CoverAudit()

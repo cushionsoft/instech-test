@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -23,7 +22,7 @@ namespace Claims.Migrations
                 {
                     table.PrimaryKey("PK_ClaimAudits", x => x.Id);
                 });
-            
+
             migrationBuilder.CreateTable(
                 name: "CoverAudits",
                 columns: table => new
@@ -44,7 +43,7 @@ namespace Claims.Migrations
         {
             migrationBuilder.DropTable(
                 name: "ClaimAudits");
-            
+
             migrationBuilder.DropTable(
                 name: "CoverAudits");
         }
