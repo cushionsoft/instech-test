@@ -5,8 +5,12 @@ using Claims.Core.Repositories;
 using Claims.Core.Services;
 using Claims.Infrastructure;
 using Claims.Infrastructure.Repositories;
+using Claims.Web.Models;
+using Claims.Web.Validators;
+using FluentValidation;
 using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using System.Text.Json.Serialization;
 
 
@@ -46,6 +50,9 @@ builder.Services.AddScoped<IClaimRepository, ClaimRepository>();
 builder.Services.AddScoped<IClaimService, ClaimService>();
 builder.Services.AddScoped<ICoverService, CoverService>();
 builder.Services.AddScoped<IPremiumCalculatorService, PremiumCalculatorService>();
+builder.Services.AddScoped<IValidator<Claim>, ClaimValidator>();
+
+builder.Services.AddFluentValidationAutoValidation();
 
 var app = builder.Build();
 
