@@ -8,6 +8,5 @@ namespace Claims.Core.Services
         Task DeleteAsync(string id);
         Task<IEnumerable<Cover>> GetAsync();
         Task<Cover?> GetAsync(string id);
-        decimal ComputePremium(DateOnly startDate, DateOnly endDate, Enums.CoverType coverType);
     }
 }
