@@ -12,19 +12,21 @@ public class CoversController : ControllerBase
 {
     private readonly ILogger<CoversController> _logger;
     private readonly ICoverService _coverService;
+    private readonly IPremiumCalculatorService _premiumCalculatorService;
     private readonly IMapper _mapper;
 
-    public CoversController(ICoverService coverService, IMapper mapper, ILogger<CoversController> logger)
+    public CoversController(ICoverService coverService, IPremiumCalculatorService premiumCalculatorService, IMapper mapper, ILogger<CoversController> logger)
     {
         _logger = logger;
         _coverService = coverService;
+        _premiumCalculatorService = premiumCalculatorService;
         _mapper = mapper;
     }
 
     [HttpGet("premium")] // change of the endpoint name and type breaks contract, but it fixes swagger and makes it compliant with REST
     public ActionResult ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)
     {
-        return Ok(_coverService.ComputePremium(startDate, endDate, coverType));
+        return Ok(_premiumCalculatorService.ComputePremium(startDate, endDate, coverType));
     }
 
     [HttpGet]

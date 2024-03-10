@@ -1,6 +1,6 @@
 using AutoMapper;
 using Claims;
-using Claims.Application;
+using Claims.Application.Services;
 using Claims.Core.Repositories;
 using Claims.Core.Services;
 using Claims.Infrastructure;
@@ -45,6 +45,7 @@ builder.Services.AddScoped<ICoverRepository, CoverRepository>();
 builder.Services.AddScoped<IClaimRepository, ClaimRepository>();
 builder.Services.AddScoped<IClaimService, ClaimService>();
 builder.Services.AddScoped<ICoverService, CoverService>();
+builder.Services.AddScoped<IPremiumCalculatorService, PremiumCalculatorService>();
 
 var app = builder.Build();
 

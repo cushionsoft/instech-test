@@ -1,9 +1,8 @@
 ﻿using Claims.Core.Entities;
-using Claims.Core.Enums;
 using Claims.Core.Repositories;
 using Claims.Core.Services;
 
-namespace Claims.Application
+namespace Claims.Application.Services
 {
     public class CoverService : ICoverService
     {
@@ -41,20 +40,20 @@ namespace Claims.Application
             await _coverRepository.DeleteItemAsync(id);
         }
 
-        public decimal ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)
+        public decimal ComputePremium(DateOnly startDate, DateOnly endDate, Core.Enums.CoverType coverType)
         {
             var multiplier = 1.3m;
-            if (coverType == CoverType.Yacht)
+            if (coverType == Core.Enums.CoverType.Yacht)
             {
                 multiplier = 1.1m;
             }
 
-            if (coverType == CoverType.PassengerShip)
+            if (coverType == Core.Enums.CoverType.PassengerShip)
             {
                 multiplier = 1.2m;
             }
 
-            if (coverType == CoverType.Tanker)
+            if (coverType == Core.Enums.CoverType.Tanker)
             {
                 multiplier = 1.5m;
             }
@@ -66,9 +65,9 @@ namespace Claims.Application
             for (var i = 0; i < insuranceLength; i++)
             {
                 if (i < 30) totalPremium += premiumPerDay;
-                if (i < 180 && coverType == CoverType.Yacht) totalPremium += premiumPerDay - premiumPerDay * 0.05m;
+                if (i < 180 && coverType == Core.Enums.CoverType.Yacht) totalPremium += premiumPerDay - premiumPerDay * 0.05m;
                 else if (i < 180) totalPremium += premiumPerDay - premiumPerDay * 0.02m;
-                if (i < 365 && coverType != CoverType.Yacht) totalPremium += premiumPerDay - premiumPerDay * 0.03m;
+                if (i < 365 && coverType != Core.Enums.CoverType.Yacht) totalPremium += premiumPerDay - premiumPerDay * 0.03m;
                 else if (i < 365) totalPremium += premiumPerDay - premiumPerDay * 0.08m;
             }
 

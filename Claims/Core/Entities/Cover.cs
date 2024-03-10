@@ -1,6 +1,4 @@
-﻿using Claims.Core.Enums;
-
-namespace Claims.Core.Entities
+﻿namespace Claims.Core.Entities
 {
     public class Cover
     {
@@ -10,7 +8,7 @@ namespace Claims.Core.Entities
 
         public required DateOnly EndDate { get; set; }
 
-        public required CoverType Type { get; set; }
+        public required Enums.CoverType Type { get; set; }
 
         public required decimal Premium { get; set; }
     }

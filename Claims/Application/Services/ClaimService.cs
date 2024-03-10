@@ -2,7 +2,7 @@
 using Claims.Core.Repositories;
 using Claims.Core.Services;
 
-namespace Claims.Application
+namespace Claims.Application.Services
 {
     public class ClaimService : IClaimService
     {

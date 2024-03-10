@@ -1,5 +1,4 @@
 ﻿using Claims.Core.Entities;
-using Claims.Core.Enums;
 
 namespace Claims.Core.Services
 {
@@ -9,6 +8,6 @@ namespace Claims.Core.Services
         Task DeleteAsync(string id);
         Task<IEnumerable<Cover>> GetAsync();
         Task<Cover?> GetAsync(string id);
-        decimal ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType);
+        decimal ComputePremium(DateOnly startDate, DateOnly endDate, Enums.CoverType coverType);
     }
 }
