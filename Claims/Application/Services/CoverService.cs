@@ -8,11 +8,13 @@ namespace Claims.Application.Services
     {
         private readonly IAuditService _auditService;
         private readonly ICoverRepository _coverRepository;
+        private readonly IPremiumCalculatorService _premiumCalculatorService;
 
-        public CoverService(IAuditService auditService, ICoverRepository coverRepository)
+        public CoverService(IAuditService auditService, IPremiumCalculatorService premiumCalculatorService, ICoverRepository coverRepository)
         {
             _auditService = auditService;
             _coverRepository = coverRepository;
+            _premiumCalculatorService = premiumCalculatorService;
         }
 
         public async Task<IEnumerable<Cover>> GetAsync()
@@ -28,7 +30,7 @@ namespace Claims.Application.Services
         public async Task<Cover> CreateAsync(Cover cover)
         {
             cover.Id = Guid.NewGuid().ToString();
-            cover.Premium = ComputePremium(cover.StartDate, cover.EndDate, cover.Type);
+            cover.Premium = _premiumCalculatorService.ComputePremium(cover.StartDate, cover.EndDate, cover.Type);
             await _coverRepository.AddItemAsync(cover);
             _auditService.AddCoverAudit(new CoverAudit { CoverId = cover.Id, HttpRequestType = "POST" });
             return cover;

@@ -10,12 +10,15 @@ namespace Claims.Application.Services
         private readonly BlockingCollection<ClaimAudit> _claimAudits;
         private readonly BlockingCollection<CoverAudit> _coverAudits;
         private readonly IServiceProvider _serviceProvider;
+        private readonly ILogger<AuditService> _logger;
 
-        public AuditService(IServiceProvider serviceProvider)
+        public AuditService(IServiceProvider serviceProvider, ILogger<AuditService> logger)
         {
             _claimAudits = new BlockingCollection<ClaimAudit>();
             _coverAudits = new BlockingCollection<CoverAudit>();
             _serviceProvider = serviceProvider;
+            _logger = logger;
+
             Task.Run(SaveClaims);
             Task.Run(SaveCovers);
         }
@@ -36,10 +39,15 @@ namespace Claims.Application.Services
             {
                 var claimAudit = _claimAudits.Take();
 
-                using (var scope = _serviceProvider.CreateScope())
+                using var scope = _serviceProvider.CreateScope();
+                var auditRepository = scope.ServiceProvider.GetRequiredService<IAuditRepository>();
+                try
                 {
-                    var auditRepository = scope.ServiceProvider.GetRequiredService<IAuditRepository>();
                     await auditRepository.AuditClaim(claimAudit.ClaimId, claimAudit.HttpRequestType);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error saving cover audit");
                 }
             }
 
@@ -49,11 +57,16 @@ namespace Claims.Application.Services
         {
             while (true)
             {
-                var coverAudt = _coverAudits.Take();
-                using (var scope = _serviceProvider.CreateScope())
+                var coverAudit = _coverAudits.Take();
+                using var scope = _serviceProvider.CreateScope();
+                var auditRepository = scope.ServiceProvider.GetRequiredService<IAuditRepository>();
+                try
                 {
-                    var auditRepository = scope.ServiceProvider.GetRequiredService<IAuditRepository>();
-                    await auditRepository.AuditCover(coverAudt.CoverId, coverAudt.HttpRequestType);
+                    await auditRepository.AuditCover(coverAudit.CoverId, coverAudit.HttpRequestType);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error saving cover audit");
                 }
             }
 
