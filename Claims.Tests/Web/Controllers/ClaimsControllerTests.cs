@@ -15,7 +15,7 @@ namespace Claims.Tests.Web.Controllers
         private readonly IMapper _mapper;
         private readonly ClaimsController _sut;
         private readonly ILogger<ClaimsController> _logger;
-        private IClaimService _claimService;
+        private readonly IClaimService _claimService;
 
         public ClaimsControllerTests()
         {
@@ -47,7 +47,7 @@ namespace Claims.Tests.Web.Controllers
             var results = (await _sut.GetAsync()).ToList();
 
             // Assert
-            for (int i = 0; i < results.Count(); i++)
+            for (int i = 0; i < results.Count; i++)
             {
                 Assert.Equal(claims[i].Name, results[i].Name);
                 Assert.Equal(claims[i].CoverId, results[i].CoverId);
