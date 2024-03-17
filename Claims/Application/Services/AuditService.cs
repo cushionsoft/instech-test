@@ -47,7 +47,7 @@ namespace Claims.Application.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error saving cover audit");
+                    _logger.LogError(ex, "Error saving Claim audit");
                 }
             }
 
@@ -66,7 +66,7 @@ namespace Claims.Application.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error saving cover audit");
+                    _logger.LogError(ex, "Error saving Cover audit");
                 }
             }
 
