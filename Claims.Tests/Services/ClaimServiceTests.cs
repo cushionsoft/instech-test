@@ -8,21 +8,29 @@ namespace Claims.Application.Services.Tests
 {
     public class ClaimServiceTests
     {
+        private readonly IAuditService _auditService;
+        private readonly IClaimRepository _claimRepository;
+        private readonly ClaimService _claimService;
+
+        public ClaimServiceTests()
+        {
+            _auditService = Substitute.For<IAuditService>();
+            _claimRepository = Substitute.For<IClaimRepository>();
+            _claimService = new ClaimService(_auditService, _claimRepository);
+        }
+
         [Fact]
         public async Task CreateAsync_Should_CreateClaimAndAddAudit()
         {
             // Arrange
             var claim = new Claim { Id = "1", CoverId = "1", Created = DateTime.Now, DamageCost = 1, Name = "Test Claim", Type = Core.Enums.ClaimType.BadWeather };
-            var auditService = Substitute.For<IAuditService>();
-            var claimRepository = Substitute.For<IClaimRepository>();
-            var claimService = new ClaimService(auditService, claimRepository);
 
             // Act
-            var result = await claimService.CreateAsync(claim);
+            var result = await _claimService.CreateAsync(claim);
 
             // Assert
-            await claimRepository.Received().AddItemAsync(claim);
-            auditService.Received().AddClaimAudit(Arg.Is<ClaimAudit>(audit => audit.ClaimId == claim.Id && audit.HttpRequestType == "POST"));
+            await _claimRepository.Received().AddItemAsync(claim);
+            _auditService.Received().AddClaimAudit(Arg.Is<ClaimAudit>(audit => audit.ClaimId == claim.Id && audit.HttpRequestType == "POST"));
             Assert.Equal(claim, result);
         }
 
@@ -31,16 +39,13 @@ namespace Claims.Application.Services.Tests
         {
             // Arrange
             var claimId = "1";
-            var auditService = Substitute.For<IAuditService>();
-            var claimRepository = Substitute.For<IClaimRepository>();
-            var claimService = new ClaimService(auditService, claimRepository);
 
             // Act
-            await claimService.DeleteAsync(claimId);
+            await _claimService.DeleteAsync(claimId);
 
             // Assert
-            await claimRepository.Received().DeleteItemAsync(claimId);
-            auditService.Received(1).AddClaimAudit(Arg.Is<ClaimAudit>(audit => audit.ClaimId == claimId && audit.HttpRequestType == "DELETE"));
+            await _claimRepository.Received().DeleteItemAsync(claimId);
+            _auditService.Received(1).AddClaimAudit(Arg.Is<ClaimAudit>(audit => audit.ClaimId == claimId && audit.HttpRequestType == "DELETE"));
         }
     }
 }
