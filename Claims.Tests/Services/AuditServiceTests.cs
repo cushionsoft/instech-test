@@ -13,7 +13,7 @@ namespace Claims.Tests.Services
     {
         private readonly AuditService _sut;
         private readonly IAuditRepository _auditRepository;
-        private IServiceProvider _serviceProvider;
+        private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<AuditService> _logger;
 
         public AuditServiceTests()
