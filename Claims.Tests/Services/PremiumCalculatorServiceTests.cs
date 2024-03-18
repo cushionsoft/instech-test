@@ -158,7 +158,7 @@ namespace Claims.Tests.Services
                     break;
             }
 
-            //calulate discount
+            //calculate discount
             var dailyRate = _baseRate * premiumMultiplier;
 
             var expectedPremium = dailyRate * insuranceLength;

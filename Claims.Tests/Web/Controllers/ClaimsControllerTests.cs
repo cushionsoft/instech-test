@@ -32,7 +32,7 @@ namespace Claims.Tests.Web.Controllers
         }
 
         [Fact]
-        public async Task GetClaims_WhenClaimsExist_ReturnsValidContent()
+        public async Task GetClaims_WhenClaimsExist_ShouldReturnValidContent()
         {
             // Arrange
             var claims = new List<Claim> {
@@ -58,7 +58,7 @@ namespace Claims.Tests.Web.Controllers
         }
 
         [Fact]
-        public async Task GetClaim_WhenClaimExists_ReturnsValidContentAndStatusCode()
+        public async Task GetClaim_WhenClaimExists_ShouldReturnValidContentAndStatusCode()
         {
             // Arrange
             var claim = new Claim
@@ -88,7 +88,7 @@ namespace Claims.Tests.Web.Controllers
         }
 
         [Fact]
-        public async Task GetClaim_WhenClaimNotExists_ReturnsNotFoundStatusCode()
+        public async Task GetClaim_WhenClaimNotExists_ShouldReturnNotFoundStatusCode()
         {
             // Arrange
             _claimService.GetAsync().ReturnsNull();

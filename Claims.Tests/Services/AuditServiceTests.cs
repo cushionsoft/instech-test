@@ -45,7 +45,7 @@ namespace Claims.Tests.Services
         }
 
         [Fact]
-        public void AddCoverAudit_WhenAuditRepositoryNotAvailable_HandlesExceptions()
+        public void AddCoverAudit_WhenAuditRepositoryNotAvailable_ShouldHandlesExceptions()
         {
             // Arrange
             var coverAudit = new CoverAudit { CoverId = "1", HttpRequestType = "POST" };
@@ -82,7 +82,7 @@ namespace Claims.Tests.Services
         }
 
         [Fact]
-        public void AddClaimAudit_WhenAuditRepositoryNotAvailable_HandlesExceptions()
+        public void AddClaimAudit_WhenAuditRepositoryNotAvailable_ShouldHandlesExceptions()
         {
             // Arrange
             var claimAudit = new ClaimAudit { ClaimId = "1", HttpRequestType = "POST" };
