@@ -6,7 +6,7 @@ namespace Claims.Application.Strategies.PremiumCalculatorStrategies
     {
         protected readonly decimal _dailyBase;
         public virtual decimal DailyMultiplier { get; } = 1.3m;
-        public decimal DailyPremium => _dailyBase * DailyMultiplier;
+        protected decimal DailyPremium => _dailyBase * DailyMultiplier;
 
         public DefaultCalculatorStrategy(decimal dailyBase)
         {
@@ -15,11 +15,13 @@ namespace Claims.Application.Strategies.PremiumCalculatorStrategies
 
         public virtual decimal GetDailyCost(int day)
         {
-            decimal dailyCost = 0;
+            var dailyCost = DailyPremium;
 
-            if (day < 30) dailyCost += DailyPremium;
-            if (day < 180) dailyCost += (DailyPremium - DailyPremium * 0.02m);
-            if (day < 365) dailyCost += (DailyPremium - DailyPremium * 0.03m);
+            if (day >= 30)
+            {
+                dailyCost -= dailyCost * 0.02m;
+                if (day >= 180) dailyCost -= dailyCost * 0.01m;
+            }
 
             return dailyCost;
         }

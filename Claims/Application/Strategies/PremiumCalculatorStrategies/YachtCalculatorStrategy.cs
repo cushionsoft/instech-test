@@ -10,11 +10,13 @@
 
         public override decimal GetDailyCost(int day)
         {
-            decimal dailyCost = 0;
+            var dailyCost = DailyPremium;
 
-            if (day < 30) dailyCost += DailyPremium;
-            if (day < 180) dailyCost += (DailyPremium - DailyPremium * 0.05m);
-            if (day < 365) dailyCost += (DailyPremium - DailyPremium * 0.08m);
+            if (day >= 30)
+            {
+                dailyCost -= dailyCost * 0.05m;
+                if (day >= 180) dailyCost -= dailyCost * 0.03m;
+            }
 
             return dailyCost;
         }
